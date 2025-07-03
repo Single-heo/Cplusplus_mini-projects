@@ -7,7 +7,7 @@
  * - Robust user input validation
  * - Dynamic object manipulation at runtime
  *
- * Author: Your Name
+ * Author: Heitor Zanin
  * Version: 2.0
  * Date: 2025
  */
@@ -97,7 +97,7 @@ int main()
             if (rectangleCount > 1)
             {
                 int total_area = 0;
-                for (const auto& rect : rectangles)
+                for (const auto &rect : rectangles)
                 {
                     total_area += rect.base * rect.height;
                 }
@@ -114,28 +114,29 @@ int main()
             // ========= OPTIONAL EDITING SYSTEM =========
             if (getYesNo("Do you want to make some changes?"))
             {
-                clearScreen();
-
-                std::cout << "Available rectangles for editing:\n";
-                for (std::size_t i = 0; i < rectangles.size(); ++i)
-                {
-                    std::cout << "[" << i << "] " << rectangles[i].name
-                              << " (" << rectangles[i].base << "x" << rectangles[i].height << ")\n";
-                }
-
-                // Choose index (skip prompt if only one rectangle exists)
-                std::size_t index = 0;
-                if (rectangleCount > 1)
-                {
-                    index = getIntegerInRange("Select rectangle index: ", 0, rectangleCount - 1);
-                }
-
-                std::cout << "\nCurrent rectangle:\n";
-                rectangles[index].println();
-
-                // Editing loop with validation
                 while (true)
                 {
+                    clearScreen();
+
+                    std::cout << "Available rectangles for editing:\n";
+                    for (std::size_t i = 0; i < rectangles.size(); ++i)
+                    {
+                        std::cout << "[" << i << "] " << rectangles[i].name
+                                  << " (" << rectangles[i].base << "x" << rectangles[i].height << ")\n";
+                    }
+
+                    // Choose index (skip prompt if only one rectangle exists)
+                    std::size_t index = 0;
+                    if (rectangleCount > 1)
+                    {
+                        index = getIntegerInRange("Select rectangle index: ", 0, rectangleCount - 1);
+                    }
+
+                    std::cout << "\nCurrent rectangle:\n";
+                    rectangles[index].println();
+
+                    // Editing loop with validation
+
                     std::string new_name = getValidString("New name: ");
                     ushort new_base = getValidInteger("New base: ");
                     ushort new_height = getValidInteger("New height: ");
@@ -161,14 +162,19 @@ int main()
 
                         std::cout << "\n✅ Rectangle updated successfully!\n";
                         rectangles[index].println();
-                        break;
                     }
+                    if (getYesNo("Do you want change other(s) rectangle(s) ?"))
+                    {
+                        continue;
+                    }
+                    break;
                 }
             }
         }
 
         // ========= END MENU =========
-        std::cout << "\n" << std::string(40, '=') << "\n";
+        std::cout << "\n"
+                  << std::string(40, '=') << "\n";
         std::cout << "What would you like to do next?\n";
         std::cout << "1. Restart program (create new rectangles)\n";
         std::cout << "2. Exit program\n";
@@ -180,7 +186,7 @@ int main()
             isRunning = false;
             std::cout << "\n🎉 Thank you for using Rectangle Management System!\n";
             std::cout << "This program is an evolved version of a Microsoft tutorial.\n";
-            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+            std::this_thread::sleep_for(std::chrono::milliseconds(2500));
             clearScreen();
         }
         else
