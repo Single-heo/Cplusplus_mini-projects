@@ -1,13 +1,76 @@
-# Cplusplus_mini-projects
+# C++ Mini-Projects 🚀
 
-I'm studying c++ and to practices I decide to make mini-projects, this repo is divided by 2 branchs
+A collection of C++ practice projects created during my learning journey. This repository serves as a playground for experimenting with C++ concepts and building practical applications.
 
-#### Main:
-- The main code and works perfectly 
-- To contribute use main
+## 📁 Repository Structure
 
-#### Master:
-- The test code with much changes
-- It's like a lab
+This repository uses a two-branch workflow:
 
-## How to compile this code on your machine:
+### 🌟 **Main Branch**
+- **Purpose**: Stable, production-ready code
+- **Status**: Fully tested and working
+- **Usage**: For contributions and final implementations
+- **Quality**: Clean, documented, and reliable
+
+### 🔬 **Master Branch**
+- **Purpose**: Development and experimentation
+- **Status**: Work in progress, frequent changes
+- **Usage**: Testing new features and concepts
+- **Quality**: Experimental code, may contain bugs
+
+## 🛠️ Quick Start
+
+### Prerequisites
+- C++ compiler (g++ recommended)
+- Basic knowledge of C++
+
+### Compilation
+Instead of typing long compilation commands, use our convenient script:
+
+```bash
+# Simple compilation
+./compiler.sh aula03
+
+# Instead of the full command:
+# g++ -I./rectangles/headers rectangles/src/aula03.cpp -o rectangles/aula03
+```
+
+### Running Projects
+```bash
+# After compilation
+./rectangles/aula03
+```
+
+## 📚 Projects Overview
+
+Each project focuses on different C++ concepts and practical applications:
+
+- **Rectangles**: Object-oriented programming with geometric calculations
+- *More projects coming soon...*
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch from `main`
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📖 Learning Path
+
+This repository follows my C++ learning journey:
+- Basic syntax and concepts
+- Object-oriented programming
+- Data structures and algorithms
+- Real-world applications
+
+## 🎯 Goals
+
+- Practice C++ fundamentals
+- Build practical mini-applications
+- Create reusable code components
+- Document learning progress
+
+---
+
+*Happy coding! 💻*
