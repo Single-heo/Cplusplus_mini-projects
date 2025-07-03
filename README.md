@@ -17,6 +17,7 @@ This repository uses a two-branch workflow:
 - **Status**: Work in progress, frequent changes
 - **Usage**: Testing new features and concepts
 - **Quality**: Experimental code, may contain bugs
+- **News** : To see what's new, go to this branch
 
 ## 🛠️ Quick Start
 
