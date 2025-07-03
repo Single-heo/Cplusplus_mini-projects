@@ -1,17 +1,15 @@
 ﻿/**
  * Rectangle Management System - Main Application
  *
- * Este programa demonstra conceitos avançados de C++:
- * - Orientação a objetos com classes personalizadas
- * - Gerenciamento de containers (std::vector)
- * - Validação robusta de entrada do usuário
- * - Manipulação de objetos em tempo de execução
+ * This program demonstrates advanced C++ concepts:
+ * - Object-Oriented Programming with custom classes
+ * - Container management using std::vector
+ * - Robust user input validation
+ * - Dynamic object manipulation at runtime
  *
- * Evolução de um tutorial básico da Microsoft para um sistema completo
- *
- * @author Seu Nome
- * @version 2.0
- * @date 2025
+ * Author: Your Name
+ * Version: 2.0
+ * Date: 2025
  */
 
 #include "aula03.hpp"
@@ -21,171 +19,155 @@
 #include <chrono>
 #include <thread>
 #include <locale>
- /**
-  * Função principal do programa
-  * Coordena todo o fluxo de execução: criação, exibição e edição de retângulos
-  */
-int main() {
+
+int main()
+{
+    // Set system locale for correct output (e.g., UTF-8, accents)
     std::locale::global(std::locale(""));
     std::cout.imbue(std::locale());
-    bool isRunning = true;
 
-    // Loop principal da aplicação - permite reiniciar o programa
-    while (isRunning) {
-        clearScreen();
+    bool isRunning = true; // Main control flag for application loop
 
-        // ========================================
-        // COLETA DO NÚMERO DE RETÂNGULOS
-        // ========================================
+    while (isRunning)
+    {
+        clearScreen(); // Clear the console screen
 
-        ushort rectangles;
+        // ========= USER INPUT: Number of Rectangles =========
+        ushort rectangleCount;
+        do
+        {
+            rectangleCount = getValidInteger("How many rectangles do you want to create? ");
+        } while (rectangleCount < 1); // Ensure the user enters at least 1 rectangle
 
-        do {
-            rectangles = getValidInteger("How many rectangles do you want to create? ");
-        } while (rectangles < 1);
+        // ========= CREATE CONTAINER TO STORE RECTANGLES =========
+        std::vector<Rectangle> rectangles;
+        rectangles.reserve(rectangleCount); // Reserve memory to avoid reallocations
 
-        // ========================================
-        // CONTAINER PARA ARMAZENAR OS RETÂNGULOS
-        // ========================================
-
-        std::vector<Rectangle> rectangles_db;
-        rectangles_db.reserve(rectangles); // Otimização: pré-aloca memória
-
-        // ========================================
-        // LOOP DE CRIAÇÃO DOS RETÂNGULOS
-        // ========================================
-
-        for (ushort i = 0; i < rectangles; i++) {
+        // ========= RECTANGLE CREATION LOOP =========
+        for (std::size_t i = 0; i < rectangleCount; ++i)
+        {
             clearScreen();
-            std::cout << "\n=== Creating Rectangle " << (i + 1) << " of " << rectangles << " ===\n";
+            std::cout << "\n=== Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
 
-            std::string rectangle_name = getValidString("Rectangle name: ");
+            std::string name = getValidString("Rectangle name: ");
+            ushort base = 0, height = 0;
 
-            ushort rectangle_base = 0;
-            ushort rectangle_height = 0;
-            bool isGettingValues = true;
-
-            // Loop de validação aprimorado com múltiplas regras
-            while (isGettingValues) {
+            // Ask for dimensions until valid (non-zero and not a square)
+            while (true)
+            {
                 std::cout << "Enter rectangle dimensions:\n";
+                base = getValidInteger("Base length: ");
+                height = getValidInteger("Height length: ");
 
-                rectangle_base = getValidInteger("Base length: ");
-                rectangle_height = getValidInteger("Height length: ");
-
-                if (rectangle_base == 0 || rectangle_height == 0) {
-                    std::cout << "❌ Error: Base and height cannot be zero. Please enter valid values.\n";
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-                }
-                else if (rectangle_base == rectangle_height) {
-                    std::cout << "❌ Error: This would create a square (base = height = "
-                        << rectangle_base << "). Please enter different values for a rectangle.\n";
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-                }
-                else {
-                    std::cout << "✅ Valid rectangle: " << rectangle_base << " x " << rectangle_height
-                        << " (Area: " << (rectangle_base * rectangle_height) << ")\n";
+                if (base == 0 || height == 0)
+                {
+                    std::cout << "❌ Error: Base and height cannot be zero.\n";
                     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-                    isGettingValues = false;
+                }
+                else if (base == height)
+                {
+                    std::cout << "❌ Error: Base and height cannot be equal (square).\n";
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                }
+                else
+                {
+                    std::cout << "✅ Valid rectangle: " << base << " x " << height
+                              << " (Area: " << (base * height) << ")\n";
+                    std::this_thread::sleep_for(std::chrono::milliseconds(750));
+                    break;
                 }
             }
 
-            rectangles_db.emplace_back(rectangle_name, rectangle_base, rectangle_height);
+            // Store the validated rectangle in the vector
+            rectangles.emplace_back(name, base, height);
         }
 
-        // ========================================
-        // INTERFACE DE EXIBIÇÃO DOS DADOS
-        // ========================================
-
-        bool show = getYesNo("Do you want to show the rectangle information?");
-
-        if (show) {
+        // ========= DISPLAY RECTANGLE INFORMATION =========
+        if (getYesNo("Do you want to show the rectangle information?"))
+        {
             clearScreen();
             std::cout << "\n=== Rectangle Database ===\n";
-
-            // Exibição melhorada com estatísticas
-            for (ushort i = 0; i < rectangles; i++) {
+            for (std::size_t i = 0; i < rectangles.size(); ++i)
+            {
                 std::cout << "[" << i << "] ";
-                rectangles_db[i].println();
+                rectangles[i].println();
             }
 
-            // Exibe estatísticas gerais
-            if (rectangles > 1) {
+            // Show general statistics (only if more than one rectangle exists)
+            if (rectangleCount > 1)
+            {
                 int total_area = 0;
-                for (const auto& rect : rectangles_db) {
+                for (const auto& rect : rectangles)
+                {
                     total_area += rect.base * rect.height;
                 }
 
+                double average = static_cast<double>(total_area) / rectangleCount;
+
                 std::cout << "\n=== STATISTICS ===\n";
-                std::cout << "  Total rectangles: " << rectangles << "\n";
+                std::cout << "  Total rectangles: " << rectangleCount << "\n";
                 std::cout << "  Combined area: " << total_area << " square units\n";
-                std::cout << "  Average area: " << (total_area / rectangles) << " square units\n";
+                std::cout << "  Average area: " << average << " square units\n";
                 std::cout << "========================\n\n";
             }
 
-            // ========================================
-            // SISTEMA DE EDIÇÃO OPCIONAL
-            // ========================================
-
-            bool edit_rectangle = getYesNo("Do you want to make some changes?");
-
-            if (edit_rectangle) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            // ========= OPTIONAL EDITING SYSTEM =========
+            if (getYesNo("Do you want to make some changes?"))
+            {
                 clearScreen();
-                
-                std::cout << "Available rectangles for editing:\n";
-                for (ushort i = 0; i < rectangles; i++) {
-                    std::cout << "[" << i << "] " << rectangles_db[i].name
-                        << " (" << rectangles_db[i].base << "x"
-                        << rectangles_db[i].height << ")\n";
-                }
-                if (rectangles == 1) {
-                    ushort rectangle_index = 0;
-                    std::cout << "\nCurrent rectangle:\n";
-                    rectangles_db[rectangle_index].println();
 
+                std::cout << "Available rectangles for editing:\n";
+                for (std::size_t i = 0; i < rectangles.size(); ++i)
+                {
+                    std::cout << "[" << i << "] " << rectangles[i].name
+                              << " (" << rectangles[i].base << "x" << rectangles[i].height << ")\n";
+                }
+
+                // Choose index (skip prompt if only one rectangle exists)
+                std::size_t index = 0;
+                if (rectangleCount > 1)
+                {
+                    index = getIntegerInRange("Select rectangle index: ", 0, rectangleCount - 1);
+                }
+
+                std::cout << "\nCurrent rectangle:\n";
+                rectangles[index].println();
+
+                // Editing loop with validation
+                while (true)
+                {
                     std::string new_name = getValidString("New name: ");
                     ushort new_base = getValidInteger("New base: ");
                     ushort new_height = getValidInteger("New height: ");
 
-                    rectangles_db[rectangle_index].name = new_name;
-                    rectangles_db[rectangle_index].base = new_base;
-                    rectangles_db[rectangle_index].height = new_height;
+                    if (new_base == 0 || new_height == 0)
+                    {
+                        std::cout << "❌ Error: Base and height cannot be zero.\n";
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                        clearScreen();
+                    }
+                    else if (new_base == new_height)
+                    {
+                        std::cout << "❌ Error: Base and height cannot be equal (square).\n";
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                        clearScreen();
+                    }
+                    else
+                    {
+                        // Apply changes
+                        rectangles[index].name = new_name;
+                        rectangles[index].base = new_base;
+                        rectangles[index].height = new_height;
 
-                    std::cout << "\n✅ Rectangle updated successfully!\n";
-                    rectangles_db[rectangle_index].println();
+                        std::cout << "\n✅ Rectangle updated successfully!\n";
+                        rectangles[index].println();
+                        break;
+                    }
                 }
-                ushort rectangle_index = getIntegerInRange(
-                    "Select rectangle index: ", 0, rectangles - 1);
-
-                // Exibe informações atuais antes da edição
-                std::cout << "\nCurrent rectangle:\n";
-                rectangles_db[rectangle_index].println();
-
-                std::string new_name = getValidString("New name: ");
-                ushort new_base = getValidInteger("New base: ");
-                ushort new_height = getValidInteger("New height: ");
-
-                // Validação similar à criação
-                if (new_base == 0 || new_height == 0) {
-                    std::cout << "⚠️  Warning: Zero dimensions detected. Applying anyway...\n";
-                }
-                else if (new_base == new_height) {
-                    std::cout << "⚠️  Warning: This creates a square. Applying anyway...\n";
-                }
-
-                rectangles_db[rectangle_index].name = new_name;
-                rectangles_db[rectangle_index].base = new_base;
-                rectangles_db[rectangle_index].height = new_height;
-
-                std::cout << "\n✅ Rectangle updated successfully!\n";
-                rectangles_db[rectangle_index].println();
             }
         }
 
-        // ========================================
-        // MENU DE CONTINUAÇÃO
-        // ========================================
-
+        // ========= END MENU =========
         std::cout << "\n" << std::string(40, '=') << "\n";
         std::cout << "What would you like to do next?\n";
         std::cout << "1. Restart program (create new rectangles)\n";
@@ -193,16 +175,18 @@ int main() {
 
         int choice = getIntegerInRange("Choose option (1-2): ", 1, 2);
 
-        if (choice == 2) {
+        if (choice == 2)
+        {
             isRunning = false;
             std::cout << "\n🎉 Thank you for using Rectangle Management System!\n";
-            std::cout << "Program developed as evolution of Microsoft tutorial.\n";
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            std::cout << "This program is an evolved version of a Microsoft tutorial.\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
             clearScreen();
         }
-        else {
+        else
+        {
             std::cout << "\n🔄 Restarting program...\n";
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(750));
         }
     }
 
