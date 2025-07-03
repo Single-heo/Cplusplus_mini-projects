@@ -9,3 +9,5 @@ I'm studying c++ and to practices I decide to make mini-projects, this repo is d
 #### Master:
 - The test code with much changes
 - It's like a lab
+
+## How to compile this code on your machine:
