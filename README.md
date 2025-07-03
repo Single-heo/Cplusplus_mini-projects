@@ -71,6 +71,9 @@ This repository follows my C++ learning journey:
 - Create reusable code components
 - Document learning progress
 
+## ⚠️ Alert from compiler.sh
+- Claude AI, write the bash code!
+- Only c++ as writen by me!
 ---
 
 *Happy coding! 💻*
