@@ -7,7 +7,7 @@
  * - Robust user input validation
  * - Dynamic object manipulation at runtime
  *
- * Author: Your Name
+ * Author: Heitor Zanin
  * Version: 2.0
  * Date: 2025
  */
