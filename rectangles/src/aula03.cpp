@@ -47,7 +47,7 @@ int main()
         for (std::size_t i = 0; i < rectangleCount; ++i)
         {
             clearScreen();
-            std::cout << "\n=== Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
+            std::cout << "\n=== 🔨 Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
 
             std::string name = getValidString("Rectangle name: ");
             ushort base = 0, height = 0;
@@ -104,7 +104,7 @@ int main()
 
                 double average = static_cast<double>(total_area) / rectangleCount;
 
-                std::cout << "\n=== STATISTICS ===\n";
+                std::cout << "\n=== 📊 STATISTICS 📊 ===\n";
                 std::cout << "  Total rectangles: " << rectangleCount << "\n";
                 std::cout << "  Combined area: " << total_area << " square units\n";
                 std::cout << "  Average area: " << average << " square units\n";
@@ -112,7 +112,7 @@ int main()
             }
 
             // ========= OPTIONAL EDITING SYSTEM =========
-            if (getYesNo("Do you want to make some changes?"))
+            if (getYesNo("📝 Do you want to make some changes?"))
             {
                 while (true)
                 {
@@ -184,8 +184,8 @@ int main()
         if (choice == 2)
         {
             isRunning = false;
-            std::cout << "\n🎉 Thank you for using Rectangle Management System!\n";
-            std::cout << "This program is an evolved version of a Microsoft tutorial.\n";
+            std::cout << "\nThank you for using Rectangle Management System!👍\n";
+            std::cout << "💻This program is an evolved version of a Microsoft tutorial.\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(2500));
             clearScreen();
         }
