@@ -203,95 +203,86 @@ int main()
             std::cout << "📁 Saving rectangles to " << destination_path << '\n';
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-            std::fstream file(destination_path, std::ios_base::out);
             if (std::filesystem::exists(destination_path))
             {
                 std::cout << "⚠️ O arquivo '" << name_file << "' já existe.\n";
-                if (getYesNo("Do you want to overwrite "))
+                if (getYesNo("Do you want to overwrite? "))
                 {
-                    std::ofstream file(destination_path);
-                    if (file.is_open())
-                    {
-                        file << "=== Rectangle Database Export ===\n\n";
-
-                        for (std::size_t i = 0; i < rectangles.size(); ++i)
-                        {
-                            file << "-------------------\n";
-                            file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
-                            file << " Base: " << rectangles[i].base << '\n';
-                            file << " Height: " << rectangles[i].height << '\n';
-                            file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
-                            file << "-------------------\n";
-
-                            // Mostrar progresso
-                            std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
-                        }
-
-                        file.close();
-                        std::cout << "\n🎉 All new rectangles saved successfully!\n";
-                    }
-                    else
+                    std::ofstream file(destination_path, std::ios::trunc);
+                    if (!file.is_open())
                     {
                         std::cerr << "❌ Error: Could not create file!\n";
                         return -1;
                     }
-                }
-                else
-                {
-                    std::ofstream file(destination_path, std::ios::app);
-                    if (file.is_open())
-                    {
-                        file << "=== Rectangle Database Export ===\n\n";
 
-                        for (std::size_t i = 0; i < rectangles.size(); ++i)
-                        {
-                            file << "-------------------\n";
-                            file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
-                            file << " Base: " << rectangles[i].base << '\n';
-                            file << " Height: " << rectangles[i].height << '\n';
-                            file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
-                            file << "-------------------\n";
-
-                            // Mostrar progresso
-                            std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
-                        }
-
-                        file.close();
-                        std::cout << "\n🎉 All rectangles saved successfully!\n";
-                    }
-                }
-            }
-            else
-            {
-                if (!file.is_open())
-                {
-                    std::cerr << "❌ Error: Could not create file!\n";
-                    return -1;
-                }
-                else
-                {
-                    // Salvar todos os retângulos
                     file << "=== Rectangle Database Export ===\n\n";
-
-                    for (std::size_t i = 0; i < rectangles.size(); ++i)
+                    for (size_t i = 0; i < rectangles.size(); ++i)
                     {
                         file << "-------------------\n";
-                        file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
+                        file << "[" << i << "] Rectangle name: " << rectangles[i].getName() << "\n";
                         file << " Base: " << rectangles[i].base << '\n';
                         file << " Height: " << rectangles[i].height << '\n';
                         file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
                         file << "-------------------\n";
 
-                        // Mostrar progresso
                         std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
                     }
-
                     file.close();
-                    std::cout << "\n🎉 All rectangles saved successfully!\n";
+                    std::cout << "\n🎉 All new rectangles saved successfully!\n";
+                }
+                else
+                {
+                    std::ofstream file(destination_path, std::ios::app); // Correção: garantir modo append
+                    if (!file.is_open())
+                    {
+                        std::cerr << "❌ Error: Could not open file for appending!\n";
+                        return -1;
+                    }
+
+                    file << "=== Rectangle Database Export (appended) ===\n\n";
+                    for (size_t i = 0; i < rectangles.size(); ++i)
+                    {
+                        file << "-------------------\n";
+                        file << "[" << i << "] Rectangle name: " << rectangles[i].getName() << "\n";
+                        file << " Base: " << rectangles[i].base << '\n';
+                        file << " Height: " << rectangles[i].height << '\n';
+                        file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
+                        file << "-------------------\n";
+
+                        std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
+                    }
+                    file.close();
+                    std::cout << "\n🎉 All rectangles appended successfully!\n";
                 }
             }
-        }
+            else
+            {
+                // Arquivo não existe, criar novo
+                std::ofstream file(destination_path); // padrão é std::ios::out
+                if (!file.is_open())
+                {
+                    std::cerr << "❌ Error: Could not create file!\n";
+                    return -1;
+                }
 
-        return 0;
+                file << "=== Rectangle Database Export ===\n\n";
+                for (size_t i = 0; i < rectangles.size(); ++i)
+                {
+                    file << "-------------------\n";
+                    file << "[" << i << "] Rectangle name: " << rectangles[i].getName() << "\n";
+                    file << " Base: " << rectangles[i].base << '\n';
+                    file << " Height: " << rectangles[i].height << '\n';
+                    file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
+                    file << "-------------------\n";
+
+                    std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
+                }
+                file.close();
+                std::cout << "\n🎉 All rectangles saved successfully!\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+                clearScreen();
+                // Removido o return 0; que interrompia o loop
+            }
+        }
     }
 }
