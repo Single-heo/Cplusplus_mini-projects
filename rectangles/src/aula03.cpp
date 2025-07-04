@@ -11,14 +11,15 @@
  * Version: 2.0
  * Date: 2025
  */
-
-#include "aula03.hpp"
+#include "rectangles.hpp"
 #include "input.hpp"
 #include <vector>
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include <locale>
+#include <fstream>
+#include <filesystem>
 
 int main()
 {
@@ -47,7 +48,7 @@ int main()
         for (std::size_t i = 0; i < rectangleCount; ++i)
         {
             clearScreen();
-            std::cout << "\n=== Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
+            std::cout << "\n=== 🔨 Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
 
             std::string name = getValidString("Rectangle name: ");
             ushort base = 0, height = 0;
@@ -104,7 +105,7 @@ int main()
 
                 double average = static_cast<double>(total_area) / rectangleCount;
 
-                std::cout << "\n=== STATISTICS ===\n";
+                std::cout << "\n=== 📊 STATISTICS 📊 ===\n";
                 std::cout << "  Total rectangles: " << rectangleCount << "\n";
                 std::cout << "  Combined area: " << total_area << " square units\n";
                 std::cout << "  Average area: " << average << " square units\n";
@@ -112,7 +113,7 @@ int main()
             }
 
             // ========= OPTIONAL EDITING SYSTEM =========
-            if (getYesNo("Do you want to make some changes?"))
+            if (getYesNo("📝 Do you want to make some changes?"))
             {
                 while (true)
                 {
@@ -176,25 +177,121 @@ int main()
         std::cout << "\n"
                   << std::string(40, '=') << "\n";
         std::cout << "What would you like to do next?\n";
-        std::cout << "1. Restart program (create new rectangles)\n";
-        std::cout << "2. Exit program\n";
+        std::cout << "1. 🔄 Restart program (create new rectangles)\n";
+        std::cout << "2. 🔚 Exit program\n";
+        std::cout << "3. ⬇️ Save rectangle data\n";
 
-        int choice = getIntegerInRange("Choose option (1-2): ", 1, 2);
+        int choice = getIntegerInRange("Choose option (1-3): ", 1, 3);
 
         if (choice == 2)
         {
             isRunning = false;
-            std::cout << "\n🎉 Thank you for using Rectangle Management System!\n";
-            std::cout << "This program is an evolved version of a Microsoft tutorial.\n";
+            std::cout << "\nThank you for using Rectangle Management System!👍\n";
+            std::cout << "💻This program is an evolved version of a Microsoft tutorial.\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(2500));
             clearScreen();
         }
-        else
+        else if (choice == 1)
         {
             std::cout << "\n🔄 Restarting program...\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(750));
         }
-    }
+        else if (choice == 3)
+        {
+            std::string name_file = "rectangles_db.txt";
+            const std::string destination_path = "../rectangles_db/" + name_file;
+            std::cout << "📁 Saving rectangles to " << destination_path << '\n';
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    return 0;
+            std::fstream file(destination_path, std::ios_base::out);
+            if (std::filesystem::exists(destination_path))
+            {
+                std::cout << "⚠️ O arquivo '" << name_file << "' já existe.\n";
+                if (getYesNo("Do you want to overwrite "))
+                {
+                    std::ofstream file(destination_path);
+                    if (file.is_open())
+                    {
+                        file << "=== Rectangle Database Export ===\n\n";
+
+                        for (std::size_t i = 0; i < rectangles.size(); ++i)
+                        {
+                            file << "-------------------\n";
+                            file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
+                            file << " Base: " << rectangles[i].base << '\n';
+                            file << " Height: " << rectangles[i].height << '\n';
+                            file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
+                            file << "-------------------\n";
+
+                            // Mostrar progresso
+                            std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
+                        }
+
+                        file.close();
+                        std::cout << "\n🎉 All new rectangles saved successfully!\n";
+                    }
+                    else
+                    {
+                        std::cerr << "❌ Error: Could not create file!\n";
+                        return -1;
+                    }
+                }
+                else
+                {
+                    std::ofstream file(destination_path, std::ios::app);
+                    if (file.is_open())
+                    {
+                        file << "=== Rectangle Database Export ===\n\n";
+
+                        for (std::size_t i = 0; i < rectangles.size(); ++i)
+                        {
+                            file << "-------------------\n";
+                            file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
+                            file << " Base: " << rectangles[i].base << '\n';
+                            file << " Height: " << rectangles[i].height << '\n';
+                            file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
+                            file << "-------------------\n";
+
+                            // Mostrar progresso
+                            std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
+                        }
+
+                        file.close();
+                        std::cout << "\n🎉 All rectangles saved successfully!\n";
+                    }
+                }
+            }
+            else
+            {
+                if (!file.is_open())
+                {
+                    std::cerr << "❌ Error: Could not create file!\n";
+                    return -1;
+                }
+                else
+                {
+                    // Salvar todos os retângulos
+                    file << "=== Rectangle Database Export ===\n\n";
+
+                    for (std::size_t i = 0; i < rectangles.size(); ++i)
+                    {
+                        file << "-------------------\n";
+                        file << "[" << i << "] " << "Rectangle name: " << rectangles[i].getName() << "\n";
+                        file << " Base: " << rectangles[i].base << '\n';
+                        file << " Height: " << rectangles[i].height << '\n';
+                        file << " Area: " << (rectangles[i].base * rectangles[i].height) << "\n";
+                        file << "-------------------\n";
+
+                        // Mostrar progresso
+                        std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
+                    }
+
+                    file.close();
+                    std::cout << "\n🎉 All rectangles saved successfully!\n";
+                }
+            }
+        }
+
+        return 0;
+    }
 }

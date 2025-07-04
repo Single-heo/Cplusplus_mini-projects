@@ -23,7 +23,7 @@ This repository uses a two-branch workflow:
 
 ### Prerequisites
 - C++ compiler (g++ recommended)
-- Basic knowledge of C++
+- Basic knowledge of C++ from classes preferably
 
 ### Compilation
 Instead of typing long compilation commands, use our convenient script:
@@ -72,6 +72,9 @@ This repository follows my C++ learning journey:
 - Create reusable code components
 - Document learning progress
 
+## ⚠️ Alert from compiler.sh
+- Claude AI, write the bash code!
+- Only c++ as writen by me!
 ---
 
 *Happy coding! 💻*
