@@ -34,7 +34,7 @@ int main()
         clearScreen(); // Clear the console screen
 
         // ========= USER INPUT: Number of Rectangles =========
-        ushort rectangleCount;
+        std::size_t rectangleCount;
         do
         {
             rectangleCount = getValidInteger("How many rectangles do you want to create? ");
@@ -51,7 +51,7 @@ int main()
             std::cout << "\n=== 🔨 Creating Rectangle " << (i + 1) << " of " << rectangleCount << " ===\n";
 
             std::string name = getValidString("Rectangle name: ");
-            ushort base = 0, height = 0;
+            std::size_t base = 0, height = 0;
 
             // Ask for dimensions until valid (non-zero and not a square)
             while (true)
@@ -74,6 +74,7 @@ int main()
                 {
                     std::cout << "✅ Valid rectangle: " << base << " x " << height
                               << " (Area: " << (base * height) << ")\n";
+                    std::cout << "(Perimeter: " << 2 * (base + height) << ")\n";
                     std::this_thread::sleep_for(std::chrono::milliseconds(750));
                     break;
                 }
@@ -139,8 +140,8 @@ int main()
                     // Editing loop with validation
 
                     std::string new_name = getValidString("New name: ");
-                    ushort new_base = getValidInteger("New base: ");
-                    ushort new_height = getValidInteger("New height: ");
+                    std::size_t new_base = getValidInteger("New base: ");
+                    std::size_t new_height = getValidInteger("New height: ");
 
                     if (new_base == 0 || new_height == 0)
                     {
@@ -228,7 +229,10 @@ int main()
                         std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
                     }
                     file.close();
-                    std::cout << "\n🎉 All new rectangles saved successfully!\n";
+                    clearScreen();
+                    std::cout << "\n🎉 All rectangles successfully!\n";
+                    std::cout << "📁 The data is saved, and are in " << destination_path << '\n';
+                    return 0;
                 }
                 else
                 {
@@ -252,7 +256,10 @@ int main()
                         std::cout << "✅ Rectangle '" << rectangles[i].getName() << "' saved!\n";
                     }
                     file.close();
+                    clearScreen();
                     std::cout << "\n🎉 All rectangles appended successfully!\n";
+                    std::cout << "📁 The data is saved, and are in " << destination_path << '\n';
+                    return 0;
                 }
             }
             else
@@ -281,7 +288,7 @@ int main()
                 std::cout << "\n🎉 All rectangles saved successfully!\n";
                 std::this_thread::sleep_for(std::chrono::milliseconds(1500));
                 clearScreen();
-                // Removido o return 0; que interrompia o loop
+                return 0;
             }
         }
     }

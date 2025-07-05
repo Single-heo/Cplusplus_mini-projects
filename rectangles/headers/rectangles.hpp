@@ -5,39 +5,38 @@
 #include <thread>
 #include <cstdlib> // Added for system() function
 
-typedef unsigned short int ushort; // Shorter alias for ushort
-
 class Rectangle
 {
 public:
-    std::string name{"none"}; // Default initialized to "none"
-    ushort base{};            // Default initialized to 0
-    ushort height{};          // Default initialized to 0
-    bool haveArg{};           // Default initialized to false
-
-    mutable ushort area_value{}; // Default initialized to 0
-    void changeBase(ushort &base);
-    void changeHeight(ushort &height);
-    void changeName(const std::string &newName) { this->name = newName; } // Added method to change name
-    std::string getName() const;
-    Rectangle();                                                      // Default constructor
-    Rectangle(const std::string &name, ushort &base, ushort &height); // Constructor with parameters (string passed by reference for efficiency)
-    ~Rectangle();                                                     // Destructor
-    short int areaf() const;                                          // Calculate area function
-    void println();                                                   // Print rectangle information
-    void clearScreen();                                               // Added clearScreen method declaration
+    std::string name{"none"};              // Default initialized to "none"
+    std::size_t base{};                    // Default initialized to 0
+    std::size_t height{};                  // Default initialized to 0
+    bool haveArg{};                        // Default initialized to false
+    mutable std::size_t perimeter_value{}; // Default initialized to
+    mutable std::size_t area_value{};      // Default initialized to 0
+    void changeBase(std::size_t &base);
+    void changeHeight(std::size_t &height);
+    void changeName(const std::string &newName) { this->name = newName; }       // Added method to change name
+    std::string getName() const;                                                // method to getname
+    Rectangle();                                                                // Default constructor
+    Rectangle(const std::string &name, std::size_t &base, std::size_t &height); // Constructor with parameters (string passed by reference for efficiency)
+    ~Rectangle();                                                               // Destructor
+    void println();                                                             // Print rectangle information
+    void clearScreen();                                                         // Added clearScreen method declaration
+    std::size_t areaf() const;                                                  // Declaration for areaf() method
 };
+
 inline std::string Rectangle::getName() const
 {
     return this->name;
 }
 
-inline void Rectangle::changeBase(ushort &base)
+inline void Rectangle::changeBase(std::size_t &base)
 {
     this->base = base;
 }
 
-inline void Rectangle::changeHeight(ushort &height)
+inline void Rectangle::changeHeight(std::size_t &height)
 {
     this->height = height;
 }
@@ -52,7 +51,7 @@ Rectangle::Rectangle()
 }
 
 // Parameterized constructor implementation
-inline Rectangle::Rectangle(const std::string &name, ushort &base, ushort &height)
+inline Rectangle::Rectangle(const std::string &name, std::size_t &base, std::size_t &height)
     : base(base), height(height), haveArg(true), area_value(0) // Initialize members in initialization list
 {
     std::cout << name << " has been initialized with arguments" << '\n';
@@ -78,7 +77,7 @@ inline Rectangle::~Rectangle()
 }
 
 // Area calculation function
-inline short int Rectangle::areaf() const
+inline std::size_t Rectangle::areaf() const
 {
     // Check if object was initialized without proper arguments
     if (!haveArg)
@@ -104,25 +103,13 @@ inline short int Rectangle::areaf() const
 // Print function implementation
 inline void Rectangle::println()
 {
+    std::cout << "------------------------------------------\n";
     std::cout << "Rectangle [" << name << "]:" << '\n';
     std::cout << "  Base: " << base << '\n';
     std::cout << "  Height: " << height << '\n';
+    std::cout << "  Perimeter: " << 2 * (height + base) << '\n';
+    std::cout << "  Area: " << height * base << '\n';
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-    // Try to calculate area and display result
-    int calculatedArea = areaf();
-    if (calculatedArea >= 0)
-    {
-        std::cout << "  Area: " << calculatedArea << '\n';
-    }
-    else
-    {
-        std::cout << "  Area: Cannot be calculated" << '\n';
-        clearScreen();
-    }
-
-    std::cout << "  Has Arguments: " << (haveArg ? "Yes" : "No") << '\n';
-    std::cout << "------------------------" << '\n';
 }
 
 // Clear screen function implementation
